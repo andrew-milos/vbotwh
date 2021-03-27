@@ -12,6 +12,19 @@ from flask import Flask, request
 
 import random
 
+from viberbot import Api
+from viberbot.api.bot_configuration import BotConfiguration
+from viberbot.api.messages.text_message import TextMessage
+from viberbot.api.viber_requests import ViberConversationStartedRequest
+from viberbot.api.viber_requests import ViberFailedRequest
+from viberbot.api.viber_requests import ViberMessageRequest
+from viberbot.api.viber_requests import ViberSubscribedRequest
+from viberbot.api.viber_requests import ViberUnsubscribedRequest
+
+import time
+import sched
+import threading
+
 # ------------- uptime var -------------
 boot_time = time.time()
 boot_date = datetime.datetime.now(tz=pytz.timezone("Europe/Moscow"))
@@ -19,6 +32,13 @@ boot_date = datetime.datetime.now(tz=pytz.timezone("Europe/Moscow"))
 # ------------- flask config -------------
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
 app = Flask(__name__)
+
+#--
+viber = Api(BotConfiguration(
+  name='-milos-',
+  avatar='http://viber.com/avatar.jpg',
+  auth_token=os.environ.get('VIBER_AUTH_TOKEN')
+))
 
 # ------------- bot config -------------
 WEBHOOK_TOKEN = os.environ.get('WEBHOOK_TOKEN')
@@ -34,6 +54,29 @@ tg_logger.setup(alpha_logger, token=os.environ.get("LOG_BOT_TOKEN"), users=users
 tg_logger.setup(app.logger, token=os.environ.get("LOG_BOT_TOKEN"), users=users)
 
 logger = logging.getLogger("tg-bot-template")
+
+
+@app.route('/', methods=['POST'])
+def incoming():
+	logger.debug("received request. post data: {0}".format(request.get_data()))
+
+	viber_request = viber.parse_request(request.get_data().decode('utf8'))
+
+	if isinstance(viber_request, ViberMessageRequest):
+		message = viber_request.message
+		viber.send_messages(viber_request.sender.id, [
+			message
+		])
+	elif isinstance(viber_request, ViberConversationStartedRequest) \
+			or isinstance(viber_request, ViberSubscribedRequest) \
+			or isinstance(viber_request, ViberUnsubscribedRequest):
+		viber.send_messages(viber_request.sender.id, [
+			TextMessage(None, None, viber_request.get_event_type())
+		])
+	elif isinstance(viber_request, ViberFailedRequest):
+		logger.warn("client failed receiving message. failure: {0}".format(viber_request))
+
+	return Response(status=200)
 
 
 # -------------- status webpage --------------
@@ -70,7 +113,9 @@ def webhook_on():
 
     bot.remove_webhook()
     url = 'https://' + os.environ.get('HOST') + '/' + WEBHOOK_TOKEN
-    bot.set_webhook(url=url)
+    url = 'https://' + os.environ.get('HOST') + '/'
+	viber.set_webhook(url)
+    #bot.set_webhook(url=url)
     logger.info(f'Webhook is ON! Url: %s', url)
     return "<h1>WebHook is ON!</h1>", 200
 
@@ -120,6 +165,7 @@ def echo(message):
     bot.send_message(message.chat.id, message.text)
 
 
+    
 if __name__ == '__main__':
     if os.environ.get("IS_PRODUCTION", "False") == "True":
         app.run()
