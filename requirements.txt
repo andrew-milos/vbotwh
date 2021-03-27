@@ -5,3 +5,6 @@ pyTelegramBotAPI
 uptime
 datetime
 tg-logger
+viberbot
+sched
+threading
