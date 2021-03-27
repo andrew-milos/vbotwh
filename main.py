@@ -118,8 +118,8 @@ def webhook_on():
 
     #bot.remove_webhook()
     #url = 'https://' + os.environ.get('HOST') + '/' + WEBHOOK_TOKEN
-    url = 'https://' + os.environ.get('HOST') + ':443/'
-    viber.set_webhook(url)
+    #url = 'https://' + os.environ.get('HOST') + ':443/'
+    viber.set_webhook('https://vbotwh.herokuapp.com:443/')
     #bot.set_webhook(url=url)
     logger.info(f'Webhook is ON! Url: %s', url)
     return "<h1>WebHook is ON!</h1>", 200
