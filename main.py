@@ -55,6 +55,11 @@ tg_logger.setup(app.logger, token=os.environ.get("LOG_BOT_TOKEN"), users=users)
 
 logger = logging.getLogger("tg-bot-template")
 
+@app.route('/incoming', methods=['POST'])
+def incoming():
+	logger.debug("received request. post data: {0}".format(request.get_data()))
+	# handle the request here
+	return Response(status=200)
 
 #@app.route('/', methods=['POST'])
 #def incoming():
