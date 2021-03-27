@@ -59,6 +59,12 @@ logger = logging.getLogger("tg-bot-template")
 def incoming():
     logger.info("received request. post data: {0}".format(request.get_data()))
     # handle the request here
+    # every viber message is signed, you can verify the signature using this method
+    if not viber.verify_signature(request.get_data(), request.headers.get('X-Viber-Content-Signature')):
+        return Response(status=403)
+
+    # this library supplies a simple way to receive a request object
+    viber_request = viber.parse_request(request.get_data())
     return "!", 200
 
 #@app.route('/', methods=['POST'])
