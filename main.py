@@ -35,8 +35,8 @@ app = Flask(__name__)
 
 #--
 viber = Api(BotConfiguration(
-  name='-milos-',
-  avatar='http://viber.com/avatar.jpg',
+  name='milos',
+  avatar='https://avatars.githubusercontent.com/u/19344834?s=60&v=4',
   auth_token=os.environ.get('VIBER_AUTH_TOKEN')
 ))
 
@@ -100,13 +100,13 @@ def status():
 
 
 # ------------- webhook ----------------
-@app.route('/' + WEBHOOK_TOKEN, methods=['POST'])
-def getMessage():
-    temp = request.stream.read().decode("utf-8")
-    temp = telebot.types.Update.de_json(temp)
-    logger.debug('New message received. raw: %s', temp)
-    bot.process_new_updates([temp])
-    return "!", 200
+#@app.route('/' + WEBHOOK_TOKEN, methods=['POST'])
+#def getMessage():
+#    temp = request.stream.read().decode("utf-8")
+#    temp = telebot.types.Update.de_json(temp)
+#    logger.debug('New message received. raw: %s', temp)
+#    bot.process_new_updates([temp])
+#    return "!", 200
 
 
 @app.route("/set_webhook")
@@ -138,41 +138,41 @@ def webhook_off():
 
 
 # --------------- bot -------------------
-@bot.message_handler(commands=['help', 'start'])
-def say_welcome(message):
-    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used /start or /help')
-    bot.send_message(message.chat.id,
-                     '<b>Hello! This is a telegram bot template written by <a href="https://github.com/otter18">otter18</a></b>',
-                     parse_mode='html')
+#@bot.message_handler(commands=['help', 'start'])
+#def say_welcome(message):
+#    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used /start or /help')
+#    bot.send_message(message.chat.id,
+#                     '<b>Hello! This is a telegram bot template written by <a href="https://github.com/otter18">otter18</a></b>',
+#                     parse_mode='html')
 
 
-@bot.message_handler(func=lambda message: sum([int(elem in message.text.lower()) for elem in ['привет', 'hello', 'hi', 'privet']]))
-def hi(message):
-    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used hi option:\n\n%s', message.text)
-    bot.send_message(message.chat.id, random.choices(['Приветствую', 'Здравствуйте', 'Привет!']))
+#@bot.message_handler(func=lambda message: sum([int(elem in message.text.lower()) for elem in ['привет', 'hello', 'hi', 'privet']]))
+#def hi(message):
+#    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used hi option:\n\n%s', message.text)
+#    bot.send_message(message.chat.id, random.choices(['Приветствую', 'Здравствуйте', 'Привет!']))
 
                      
-@bot.message_handler(func=lambda message: sum([int(elem in message.text.lower()) for elem in ['как дела', 'как ты', 'how are you', 'дела', 'how is it going']]))
-def howru(message):
-    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used dela option:\n\n%s', message.text)
-    bot.send_message(message.chat.id, random.choices(['Хорошо', 'Отлично', 'Good. And how are u?']))
+#@bot.message_handler(func=lambda message: sum([int(elem in message.text.lower()) for elem in ['как дела', 'как ты', 'how are you', 'дела', 'how is it going']]))
+#def howru(message):
+#    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used dela option:\n\n%s', message.text)
+#    bot.send_message(message.chat.id, random.choices(['Хорошо', 'Отлично', 'Good. And how are u?']))
 
 
-@bot.message_handler(func=lambda message: sum([int(elem in message.text.lower()) for elem in ['зовут', 'name', 'имя']]))
-def name(message):
-    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used name option:\n\n%s', message.text)
-    bot.send_message(message.chat.id, random.choices(['Я telegram-template-bot', 'Я бот шаблон, но ты можешь звать меня в свой проект', 'Это секрет. Используй команду /help, чтобы узнать']))
+#@bot.message_handler(func=lambda message: sum([int(elem in message.text.lower()) for elem in ['зовут', 'name', 'имя']]))
+#def name(message):
+#    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used name option:\n\n%s', message.text)
+#    bot.send_message(message.chat.id, random.choices(['Я telegram-template-bot', 'Я бот шаблон, но ты можешь звать меня в свой проект', 'Это секрет. Используй команду /help, чтобы узнать']))
 
 
-@bot.message_handler(func=lambda message: True)
-def echo(message):
-    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used echo:\n\n%s', message.text)
-    bot.send_message(message.chat.id, message.text)
+#@bot.message_handler(func=lambda message: True)
+#def echo(message):
+#    logger.info(f'</code>@{message.from_user.username}<code> ({message.chat.id}) used echo:\n\n%s', message.text)
+#    bot.send_message(message.chat.id, message.text)
 
 
     
 if __name__ == '__main__':
-    if os.environ.get("IS_PRODUCTION", "False") == "True":
+#    if os.environ.get("IS_PRODUCTION", "False") == "True":
         app.run()
-    else:
-        bot.polling(none_stop=True)
+#    else:
+#        bot.polling(none_stop=True)
