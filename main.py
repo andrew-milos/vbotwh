@@ -59,7 +59,7 @@ logger = logging.getLogger("tg-bot-template")
 def incoming():
 	logger.debug("received request. post data: {0}".format(request.get_data()))
 	# handle the request here
-	return Response(status=200)
+	return "!", 200
 
 #@app.route('/', methods=['POST'])
 #def incoming():
