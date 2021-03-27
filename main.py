@@ -65,6 +65,20 @@ def incoming():
 
     # this library supplies a simple way to receive a request object
     viber_request = viber.parse_request(request.get_data())
+    if isinstance(viber_request, ViberMessageRequest):
+        message = viber_request.message
+        # lets echo back
+        viber.send_messages(viber_request.sender.id, [
+            message
+        ])
+    elif isinstance(viber_request, ViberSubscribedRequest):
+        viber.send_messages(viber_request.get_user.id, [
+            TextMessage(text="thanks for subscribing!")
+        ])
+    elif isinstance(viber_request, ViberFailedRequest):
+        logger.info("client failed receiving message. failure: {0}".format(viber_request))
+    
+    
     return "!", 200
 
 #@app.route('/', methods=['POST'])
