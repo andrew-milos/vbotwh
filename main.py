@@ -111,9 +111,9 @@ def webhook_on():
         logger.info('Set_webhook page loaded without password')
         return "<h1>Access denied!<h1>", 403
 
-    bot.remove_webhook()
-    url = 'https://' + os.environ.get('HOST') + '/' + WEBHOOK_TOKEN
-    url = 'https://' + os.environ.get('HOST') + '/'
+    #bot.remove_webhook()
+    #url = 'https://' + os.environ.get('HOST') + '/' + WEBHOOK_TOKEN
+    url = 'https://' + os.environ.get('HOST') + ':443/'
     viber.set_webhook(url)
     #bot.set_webhook(url=url)
     logger.info(f'Webhook is ON! Url: %s', url)
