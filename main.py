@@ -21,7 +21,7 @@ from viberbot.api.viber_requests import ViberMessageRequest
 from viberbot.api.viber_requests import ViberSubscribedRequest
 from viberbot.api.viber_requests import ViberUnsubscribedRequest
 
-import time
+
 import sched
 import threading
 
