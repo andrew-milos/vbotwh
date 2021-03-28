@@ -81,6 +81,18 @@ def incoming():
     
     return "!", 200
 
+@app.route("/getinfo")
+def getinfo2():
+    password = request.args.get("password")
+    if password != ADMIN_PASSWORD:
+        logger.info('Set_webhook page loaded without password')
+        return "<h1>Access denied!<h1>", 403
+
+    gai = viber.get_account_info()
+    logger.info("received request. post data: {0}".format(request.get_data()))
+    #logger.info(f'gai is ON! Url: %s', gai)
+    return "<h1>getinfo is ON!</h1>", 200
+  
 #@app.route('/', methods=['POST'])
 #def incoming():
 #	logger.debug("received request. post data: {0}".format(request.get_data()))
