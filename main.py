@@ -90,7 +90,7 @@ def getinfo2():
 
     gai = viber.get_account_info()
     logger.info("received request. post data: {0}".format(request.get_data()))
-    #logger.info(f'gai is ON! Url: %s', gai)
+    logger.info(f'gai is ON! Url: %s', gai)
     return "<h1>getinfo is ON!</h1>", 200
   
 #@app.route('/', methods=['POST'])
